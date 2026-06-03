@@ -2,8 +2,10 @@ from fastapi import APIRouter
 from fastapi import UploadFile,File
 from services.upload_file_service import save_uploaded_file
 from services.document_chunking_service import chunk_documents
-from services.embedding_service import create_embeddning
-from services.retrieval_service import  retrieval_chunks
+
+from services.vector_store_service import (create_vector_db,add_document)
+
+import os
 
 router=APIRouter()
 
@@ -13,9 +15,11 @@ async def upload_document(file:UploadFile=File(...)):
     
     document_chunk= chunk_documents(response["path"])
     
-    vector_db=create_embeddning(document_chunk)
-    
-    retriver=retrieval_chunks(vector_db)
+    if os.path.exists('/chroma_db'):
+        add_document(document_chunk)
+    else:
+        create_vector_db(document_chunk)
+
     
     return{"message":"file uploaded successfully","file":response['fileName']}
     

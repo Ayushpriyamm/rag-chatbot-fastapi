@@ -6,7 +6,7 @@ from core.llm import llm
 from langchain_core.prompts import ChatPromptTemplate
 
 
-def retrieval_chunks(vector_db:Chroma):
+def retrieve_response(vector_db:Chroma,query:str):
     retriever=vector_db.as_retriever(search_type='similarity',search_kwargs={"k":3})
     
     prompt = ChatPromptTemplate.from_template("""
@@ -27,8 +27,6 @@ def retrieval_chunks(vector_db:Chroma):
     
     retrieval_chain=create_retrieval_chain(retriever, combine_docs_chain)
     
-    response=retrieval_chain.invoke({"input":"what is the major skills of the candidate"})
-    
-    print(response["answer"])
+    response=retrieval_chain.invoke({"input":query})
     
     return response["answer"]

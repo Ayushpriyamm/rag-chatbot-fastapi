@@ -13,13 +13,11 @@ def chunk_documents(file_path:str):
         return {"messsage":"Only .pdf , .txt and .csv file is supported"}
     
     documents=loader.load()
-    
-    
-    
+        
     splitter=RecursiveCharacterTextSplitter(chunk_size=1000,chunk_overlap=100)
     
     chunks=splitter.split_documents(documents)
     
-    print("chunk size",len(chunks))
+    #print("chunk size",len(chunks))
     
     return chunks

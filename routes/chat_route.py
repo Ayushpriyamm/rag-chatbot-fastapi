@@ -1,12 +1,15 @@
 from fastapi import APIRouter
-from services.llm_service import ask_llm
-
+from services.retrieval_service import retrieve_response
+from services.vector_store_service import load_vector_db
 router=APIRouter()
 
-@router.get('/ask')
+@router.get('/ask/{question}')
 def ask_question(question:str):
     
-    response=ask_llm(question=question)
+    db=load_vector_db()
+    
+    response=retrieve_response(vector_db=db,query=question)
+
     
     return{
         "answer":response
