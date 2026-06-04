@@ -29,4 +29,13 @@ def retrieve_response(vector_db:Chroma,query:str):
     
     response=retrieval_chain.invoke({"input":query})
     
-    return response["answer"]
+    top_source={
+        "source":response['context'][0].metadata['source'],
+        "page":response['context'][0].metadata["page_label"]
+    }
+   
+    
+    return{
+        "response":response["answer"],
+        "sources":top_source
+        } 

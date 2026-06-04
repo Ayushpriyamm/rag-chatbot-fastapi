@@ -8,6 +8,9 @@ def ask_question(question:str):
     
     db=load_vector_db()
     
+    print("Printing DB colletion count")
+    print(db._collection.count())
+    
     response=retrieve_response(vector_db=db,query=question)
 
     
