@@ -152,6 +152,7 @@ activemq-data/
 .envrc
 .venv
 uploads/
+chroma_db/
 env/
 venv/
 ENV/
