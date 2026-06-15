@@ -10,8 +10,22 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 
 chat_history_store={}
 
-def retrieve_response(vector_db:Chroma,query:str):
-    retriever=vector_db.as_retriever(search_type='similarity',search_kwargs={"k":3})
+def retrieve_response(vector_db:Chroma,query:str,doc_id:str):
+    retriever=None
+    if doc_id:
+        retriever=vector_db.as_retriever(
+            search_type='similarity',
+            search_kwargs={
+                "k":3,
+                "filter":{"doc_id":doc_id}},
+            
+            )
+    else:
+        retriever=vector_db.as_retriever(
+            search_type='similarity',
+            search_kwargs={"k":3})
+        
+    
 
     #creating system Prompt Template
     system_prompt="""
@@ -60,10 +74,18 @@ def retrieve_response(vector_db:Chroma,query:str):
             }
         )
 
-    #List to store the metadata of all the retrived chunks  
-    source=[]
+    #List to store the metadata of all the retrived chunks
+    pages=[]    
     for doc in response['context']:
-        source.append(doc.metadata)
+        pages.append(doc.metadata["page_label"])
+    
+    source={
+        "doc_id":response['context'][0].metadata['doc_id'],
+        "file_name":response['context'][0].metadata['source'],
+        "pages":pages
+    }
+        
+    
         
 
     return{
