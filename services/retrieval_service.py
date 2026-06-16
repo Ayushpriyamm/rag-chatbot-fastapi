@@ -2,10 +2,12 @@ from langchain_community.vectorstores import Chroma
 from langchain_classic.chains.combine_documents import  create_stuff_documents_chain
 from langchain_classic.chains.retrieval import create_retrieval_chain
 from core.llm import llm
+from core.prompts import system_prompt,contextualize_system_prompt
 
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory  
 from langchain_core.runnables.history import RunnableWithMessageHistory
+from langchain_classic.chains.history_aware_retriever import create_history_aware_retriever
 
 
 chat_history_store={}
@@ -26,30 +28,34 @@ def retrieve_response(vector_db:Chroma,query:str,doc_id:str):
             search_kwargs={"k":3})
         
     
-
-    #creating system Prompt Template
-    system_prompt="""
-    You are a professional pdf analyzer.Answer the question based on the provided context.
-    if question is not relatable to the provided context just say you are not aware of the topic,
-    do not give the wrong answer
     
-    context:
-    {context}
-    """
-    
-    #creting a Prompt Template
+    #creting a Prompt Template for answer generation
     prompt=ChatPromptTemplate.from_messages([
         ('system',system_prompt),
-        MessagesPlaceholder(variable_name='history'),
+        MessagesPlaceholder(variable_name='chat_history'),
         ('human','{input}')
     ])
+    
+    #creating a Contextualize Prompt Template for re-phrasing prompt
+    contextualize_q_prompt=ChatPromptTemplate.from_messages([
+        ("system",contextualize_system_prompt),
+        MessagesPlaceholder(variable_name="chat_history"),
+        ("human","{input}")
+        
+    ])
+    history_aware_retriever=create_history_aware_retriever(
+        llm=llm,
+        retriever=retriever,
+        prompt=contextualize_q_prompt
+        
+    )
     
     #stuff documents chain pipeline   
     combine_docs_chain=create_stuff_documents_chain(llm=llm,prompt=prompt)
     
     
     #retrivel chain pipeline 
-    retrieval_chain=create_retrieval_chain(retriever, combine_docs_chain)
+    retrieval_chain=create_retrieval_chain(history_aware_retriever, combine_docs_chain)
     
     #funtion to get history for particular session Id
     def get_history_by_session_id(session_id:str):
@@ -63,7 +69,7 @@ def retrieve_response(vector_db:Chroma,query:str,doc_id:str):
         get_session_history=get_history_by_session_id,
         input_messages_key="input",
         output_messages_key='answer',
-        history_messages_key="history"               
+        history_messages_key="chat_history"               
     )
 
     #invoking the chain by passing user query and session id

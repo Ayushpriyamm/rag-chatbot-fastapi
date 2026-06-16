@@ -19,8 +19,8 @@
 2. Search Inside Selected Document
    → Restrict retrieval to a specific document using metadata filtering.
 
-3. Conversational RAG
-   → Enable context-aware conversations by incorporating chat history into retrieval and response generation.
+    3. Conversational RAG
+    → Enable context-aware conversations by incorporating chat history into retrieval and response generation.
 
 4. Reranking
    → Improve retrieval quality by reordering retrieved chunks based on relevance before passing them to the LLM.
