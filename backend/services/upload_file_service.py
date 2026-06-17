@@ -1,15 +1,20 @@
 from fastapi import UploadFile,File
-import os
+from pathlib import Path
+
+BASE_DIR=Path(__file__).resolve().parent.parent
+UPLOAD_DIR=BASE_DIR/"uploads"
 
 async def save_uploaded_file(file:UploadFile=File(...)):
-    os.makedirs("uploads",exist_ok=True)
+    UPLOAD_DIR.mkdir(exist_ok=True)
+    
+    file_path=UPLOAD_DIR/file.filename
     
     content=await file.read()
     
-    with open (f"uploads/{file.filename}","wb") as f:
+    with open (file_path,"wb") as f:
         f.write(content)
         
     return {
         "fileName":file.filename,
-        "path":f"uploads/{file.filename}"
+        "path":str(file_path)
     }
