@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 
-from routes.chat_route import router as chat_router
-from routes.upload_file_route import router as file_upload_router
-from routes.file_route import router as file_router
+from backend.routes.chat_route import router as chat_router
+from backend.routes.upload_file_route import router as file_upload_router
+from backend.routes.file_route import router as file_router
 
 
 app=FastAPI()

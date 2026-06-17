@@ -1,9 +1,9 @@
 from fastapi import APIRouter
 from fastapi import UploadFile,File
-from services.upload_file_service import save_uploaded_file
-from services.document_chunking_service import chunk_documents
+from backend.services.upload_file_service import save_uploaded_file
+from backend.services.document_chunking_service import chunk_documents
 
-from services.vector_store_service import (create_vector_db,add_document)
+from backend.services.vector_store_service import (create_vector_db,add_document)
 
 import os
 

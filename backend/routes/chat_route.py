@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from services.retrieval_service import retrieve_response
-from services.vector_store_service import load_vector_db
+from backend.services.retrieval_service import retrieve_response
+from backend.services.vector_store_service import load_vector_db
 router=APIRouter()
 
 @router.get('/ask/{question}')

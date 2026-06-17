@@ -1,7 +1,11 @@
-from core.embedding import embedding
+from backend.core.embedding import embedding
 from langchain_community.vectorstores import Chroma
 
-DB_PATH= "./chroma_db"
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+DB_PATH = str(BASE_DIR / "chroma_db")
 
 def create_vector_db(chunks):
     db=Chroma.from_documents(

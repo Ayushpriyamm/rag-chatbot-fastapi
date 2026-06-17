@@ -1,8 +1,8 @@
 from langchain_community.vectorstores import Chroma
 from langchain_classic.chains.combine_documents import  create_stuff_documents_chain
 from langchain_classic.chains.retrieval import create_retrieval_chain
-from core.llm import llm
-from core.prompts import system_prompt,contextualize_system_prompt
+from backend.core.llm import llm
+from backend.core.prompts import system_prompt,contextualize_system_prompt
 
 from langchain_core.prompts import ChatPromptTemplate,MessagesPlaceholder
 from langchain_core.chat_history import InMemoryChatMessageHistory  

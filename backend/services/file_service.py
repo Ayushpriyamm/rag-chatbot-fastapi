@@ -1,4 +1,4 @@
-from services.vector_store_service import  load_vector_db
+from backend.services.vector_store_service import  load_vector_db
 
 db=load_vector_db()
 

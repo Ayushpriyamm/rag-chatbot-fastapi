@@ -1,4 +1,4 @@
-from services.document_chunking_service import chunk_documents
+from backend.services.document_chunking_service import chunk_documents
 
 chunks=chunk_documents("uploads/ABC_Technology_Employee_HandBook.pdf")
 
