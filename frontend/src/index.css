@@ -1,1 +1,17 @@
+
 @import "tailwindcss";
+
+/* ── VectorMind custom tokens ─────────────────────────── */
+@theme {
+  /* Fonts */
+  --font-sans: 'Inter', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', monospace;
+
+  /* Custom animation for upload progress bar */
+  --animate-slide: slide 1s ease-in-out infinite;
+
+  @keyframes slide {
+    0%   { transform: translateX(-100%); }
+    100% { transform: translateX(300%); }
+  }
+}

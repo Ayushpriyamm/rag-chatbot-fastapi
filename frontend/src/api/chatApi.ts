@@ -12,13 +12,13 @@ export const chatApi = {
   },
 
   // Get chat history
-  getChatHistory: async (): Promise<ChatMessage[]> => {
-    const response = await axiosInstance.get('/chat/history');
-    return response.data;
-  },
+  // getChatHistory: async (): Promise<ChatMessage[]> => {
+  //   const response = await axiosInstance.get('/chat/history');
+  //   return response.data;
+  // },
 
   // Clear chat history
-  clearChatHistory: async (): Promise<void> => {
-    await axiosInstance.delete('/chat/history');
-  },
+  // clearChatHistory: async (): Promise<void> => {
+  //   await axiosInstance.delete('/chat/history');
+  // },
 };

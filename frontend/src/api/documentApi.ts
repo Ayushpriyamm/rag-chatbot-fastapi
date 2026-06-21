@@ -4,7 +4,7 @@ import type { Document } from '../types/document';
 export const documentApi = {
   // Get all documents
   getDocuments: async (): Promise<Document[]> => {
-    const response = await axiosInstance.get('/documents');
+    const response = await axiosInstance.get('/get-documents');
     return response.data;
   },
 
@@ -12,7 +12,7 @@ export const documentApi = {
   uploadDocument: async (file: File): Promise<Document> => {
     const formData = new FormData();
     formData.append('file', file);
-    const response = await axiosInstance.post('/upload', formData, {
+    const response = await axiosInstance.post('/uploadfile', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },
@@ -21,13 +21,13 @@ export const documentApi = {
   },
 
   // Delete a document
-  deleteDocument: async (documentId: string): Promise<void> => {
-    await axiosInstance.delete(`/documents/${documentId}`);
+  deleteDocument: async (id: string): Promise<void> => {
+    await axiosInstance.delete(`/delete/${id}`);
   },
 
-  // Get document by ID
-  getDocument: async (documentId: string): Promise<Document> => {
-    const response = await axiosInstance.get(`/documents/${documentId}`);
-    return response.data;
-  },
+  // // Get all document
+  // getDocument: async (): Promise<Document> => {
+  //   const response = await axiosInstance.get('/get-documents');
+  //   return response.data;
+  // },
 };
