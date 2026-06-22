@@ -1,20 +1,37 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 from backend.services.retrieval_service import retrieve_response
 from backend.services.vector_store_service import load_vector_db
+from pydantic import BaseModel
+from typing import Optional
 router=APIRouter()
 
-@router.get('/ask/{question}')
-def ask_question(question:str,doc_id:str=None):
-    
-    db=load_vector_db()
-    
-    print("Printing DB colletion count")
-    print(db._collection.count())
-    
-    response=retrieve_response(vector_db=db, query=question, doc_id=doc_id)
+class AskRequest(BaseModel):
+    message:str 
+    doc_id:Optional[str]=None
 
-    
-    return{
-        "answer":response
-    }
+@router.post('/ask')
+def ask_question(request:AskRequest):
+    if not request.message.strip():
+        raise HTTPException(
+            status_code=400,
+            detail="Question cannot be empty"
+        )
+
+    try:
+        db = load_vector_db()
+        response = retrieve_response(
+            vector_db=db,
+            query=request.message,
+            doc_id=request.doc_id
+        )
+
+        return {
+            "response": response["response"],
+            "metadata": response["sources"]
+        }
+    except Exception as e:
+        raise HTTPException(
+            status_code=500,
+            detail=str(e)
+        )
 

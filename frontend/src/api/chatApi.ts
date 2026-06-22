@@ -4,7 +4,7 @@ import type { ChatMessage, ChatResponse } from '../types/chat';
 export const chatApi = {
   // Send a chat message
   sendMessage: async (message: string, documentIds?: string[]): Promise<ChatResponse> => {
-    const response = await axiosInstance.post('/chat', {
+    const response = await axiosInstance.post('/ask', {
       message,
       document_ids: documentIds,
     });

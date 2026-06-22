@@ -80,16 +80,31 @@ def retrieve_response(vector_db:Chroma,query:str,doc_id:str):
             }
         )
 
+    print("="*50)
+    print(response)
+    print("Context Length:", len(response["context"]))
+    print("="*50)
     #List to store the metadata of all the retrived chunks
-    pages=[]    
-    for doc in response['context']:
-        pages.append(doc.metadata["page_label"])
     
-    source={
-        "doc_id":response['context'][0].metadata['doc_id'],
-        "file_name":response['context'][0].metadata['source'],
-        "pages":pages
-    }
+    context_docs = response.get("context", [])
+
+    pages = [
+        doc.metadata.get("page_label")
+        for doc in context_docs
+    ]
+    
+    if context_docs:
+        source = {
+            "doc_id": context_docs[0].metadata.get("doc_id"),
+            "file_name": context_docs[0].metadata.get("source"),
+            "pages": pages
+        }
+    else:
+        source = {
+            "doc_id": None,
+            "file_name": None,
+            "pages": []
+        }
         
     
         

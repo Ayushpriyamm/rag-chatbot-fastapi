@@ -3,11 +3,15 @@ export interface ChatMessage {
   role: 'user' | 'assistant';
   content: string;
   timestamp: string;
-  sources?: string[];
+}
+
+export interface ChatMetadata {
+  doc_id: string | null;
+  file_name: string | null;
+  pages: string[];
 }
 
 export interface ChatResponse {
-  message: ChatMessage;
-  sources: string[];
-  relevance: number;
+  response: string;
+  metadata: ChatMetadata;
 }
